@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import com.example.cursomc.enuns.EstadoPagamento;
+import com.example.cursomc.util.DataUtil;
 
 @Entity
 public class PagamenteComBoleto extends Pagamento {
@@ -15,11 +16,11 @@ public class PagamenteComBoleto extends Pagamento {
 
 	private Date dataPagamento;
 
-	public PagamenteComBoleto(Integer id, EstadoPagamento estado, Pedido pedido, Date dataVencimento,
-			Date dataPagamento) {
+	public PagamenteComBoleto(Integer id, EstadoPagamento estado, Pedido pedido, String dataVencimento,
+			String dataPagamento) {
 		super(id, estado, pedido);
-		this.dataVencimento = dataVencimento;
-		this.dataPagamento = dataPagamento;
+		this.dataVencimento = DataUtil.convertToDate(dataVencimento);
+		this.dataPagamento = DataUtil.convertToDate(dataPagamento);
 	}
 
 	public Date getDataVencimento() {
