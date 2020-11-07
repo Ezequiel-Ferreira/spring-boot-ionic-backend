@@ -30,7 +30,6 @@ public class Categoria implements Serializable {
 	}
 
 	public Categoria(Integer id, String nome) {
-		super();
 		this.id = id;
 		this.nome = nome;
 	}
@@ -84,12 +83,6 @@ public class Categoria implements Serializable {
 		this.produtos = produtos;
 	}
 
-	@Override
-	public String toString() {
-		return "Categoria [id=" + id + ", nome=" + nome + ", produtos=" + produtos + "]";
-	}
-	
-	
 
 	
 }
