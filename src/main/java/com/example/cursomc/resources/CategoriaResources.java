@@ -3,6 +3,7 @@ package com.example.cursomc.resources;
 import java.net.URI;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.example.cursomc.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.cursomc.domain.Categoria;
+import com.example.cursomc.dto.CategoriaDTO;
 import com.example.cursomc.service.CategoriaService;
 
 @RestController
@@ -39,10 +41,10 @@ public class CategoriaResources {
 	}
 
 	@GetMapping("/categorias")
-	ResponseEntity<List<Categoria>> listarCategorias() {
-		List<Categoria> lista;
-		lista = this.cateService.buscarTodos();
-		return new ResponseEntity<>(lista, HttpStatus.ACCEPTED);
+	ResponseEntity<List<CategoriaDTO>> listarCategorias() {
+		List<Categoria> lista = this.cateService.buscarTodos();
+		List<CategoriaDTO> listaDto = lista.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return new ResponseEntity<>(listaDto, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/getbyid/{id}")
