@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.example.cursomc.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,7 +35,7 @@ public class CategoriaResources {
 
 	@PostMapping("/create")
 	public ResponseEntity<Void> create(@RequestBody Categoria categoria) {
-		categoria = this.cateService.criarCategoria(categoria);
+		categoria = this.cateService.createCategoria(categoria);
 		categoria = categoriaRepository.save(categoria);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
 				.toUri();
@@ -42,10 +44,23 @@ public class CategoriaResources {
 
 	@GetMapping("/categorias")
 	ResponseEntity<List<CategoriaDTO>> listarCategorias() {
-		List<Categoria> lista = this.cateService.buscarTodos();
+		List<Categoria> lista = this.cateService.findAll();
 		List<CategoriaDTO> listaDto = lista.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
 		return new ResponseEntity<>(listaDto, HttpStatus.ACCEPTED);
 	}
+	
+	@GetMapping("/categorias/{page}")
+	ResponseEntity<Page<CategoriaDTO>> listCategoriasPages(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24")	Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction	
+			) {
+		
+		Page<Categoria> lista = this.cateService.findPage(page, linesPerPage, orderBy, direction);
+		Page<CategoriaDTO> listaDto = lista.map(obj -> new CategoriaDTO(obj));
+		return new ResponseEntity<>(listaDto, HttpStatus.ACCEPTED);
+	}
+	
 
 	@GetMapping("/getbyid/{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") Integer id) {

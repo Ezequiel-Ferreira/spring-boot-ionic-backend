@@ -3,8 +3,14 @@ package com.example.cursomc.service;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +26,7 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository cateRepo;
 
-	public Categoria criarCategoria(Categoria categoria) {
+	public Categoria createCategoria(Categoria categoria) {
 		try {
 
 			if (categoria.getId() != null) {
@@ -33,9 +39,16 @@ public class CategoriaService {
 		return null;
 	}
 
-	public List<Categoria> buscarTodos() {
+	public List<Categoria> findAll() {
 		List<Categoria> categorias = cateRepo.findAll();
 		return categorias;
+	}
+	
+	public Page<Categoria> findPage(Integer page, Integer linePerPage, String orderBy, String direction){
+		
+		PageRequest pageRequest = PageRequest.of(page, linePerPage, Sort.Direction.valueOf(direction), orderBy);
+		return cateRepo.findAll(pageRequest);
+		
 	}
 
 	public Categoria categoriaPorId(Integer id) {
