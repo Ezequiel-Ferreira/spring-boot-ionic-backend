@@ -2,6 +2,11 @@ package com.example.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+
+
 import com.example.cursomc.domain.Categoria;
 
 public class CategoriaDTO implements Serializable {
@@ -9,6 +14,9 @@ public class CategoriaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	
+	@NotEmpty(message = "Preenchemento obrigatório!")
+	@Size(min = 5, max = 80, message = "Deve ter de 5 a 8 caracteres")
 	private String nome;
 	
 	
@@ -43,9 +51,6 @@ public class CategoriaDTO implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-	
-		
-	
+
 
 }

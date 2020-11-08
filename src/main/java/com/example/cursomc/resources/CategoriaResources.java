@@ -1,11 +1,11 @@
 package com.example.cursomc.resources;
 
 import java.net.URI;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.cursomc.repository.CategoriaRepository;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.cursomc.domain.Categoria;
 import com.example.cursomc.dto.CategoriaDTO;
+import com.example.cursomc.repository.CategoriaRepository;
 import com.example.cursomc.service.CategoriaService;
 
 @RestController
@@ -34,11 +35,10 @@ public class CategoriaResources {
 	CategoriaRepository categoriaRepository;
 
 	@PostMapping("/create")
-	public ResponseEntity<Void> create(@RequestBody Categoria categoria) {
-		categoria = this.cateService.createCategoria(categoria);
+	public ResponseEntity<Void> create(@Valid @RequestBody CategoriaDTO categoriadto) {
+		Categoria categoria = this.cateService.fromDTO(categoriadto);
 		categoria = categoriaRepository.save(categoria);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
-				.toUri();
+		URI uri = ServletUriComponentsBuilder.fromPath("http://localhost:8070/categoria/getbyid/{id}").buildAndExpand(categoria.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
@@ -69,7 +69,8 @@ public class CategoriaResources {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateById(@PathVariable("id") Integer id, @RequestBody Categoria categoria) {
+	public ResponseEntity<?> updateById(@PathVariable("id") Integer id, @Valid @RequestBody CategoriaDTO categoriaDto) {
+		Categoria categoria = cateService.fromDTO(categoriaDto);
 		Categoria cate = cateService.updateCategoria(id, categoria);
 		return new ResponseEntity<>(cate, HttpStatus.OK);
 	}
