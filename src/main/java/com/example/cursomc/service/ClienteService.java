@@ -18,6 +18,7 @@ import com.example.cursomc.domain.Cliente;
 import com.example.cursomc.domain.Endereco;
 import com.example.cursomc.dto.ClienteDTO;
 import com.example.cursomc.dto.ClienteDTONew;
+import com.example.cursomc.enuns.TipoCliente;
 import com.example.cursomc.repository.CidadeRepository;
 import com.example.cursomc.repository.ClienteRepository;
 import com.example.cursomc.service.exception.DataIntegrityException;
@@ -51,7 +52,7 @@ public class ClienteService {
 	}
 
 	public Cliente fromDTO(ClienteDTONew clienteDto) {
-		Cliente cliente = new Cliente(null, clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getTipo());
+		Cliente cliente = new Cliente(0, clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getCpfOuCnpj(), TipoCliente.toEnun(clienteDto.getTipo()));
 		
 		cliente = clienteRepo.save(cliente);
 

@@ -1,13 +1,28 @@
 package com.example.cursomc.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.example.cursomc.resources.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteDTONew {
-	
+	@NotEmpty(message = "O campo nome não pode ser vazio")
+	@Length(min = 3, max = 40, message ="Deve ter entre 3 e 40 caracteres!")
 	private String nome;
+	@NotEmpty(message = "O campo email não pode ser vazio")
+	@Email(message = "Email invalido!")
 	private String email;
+	@NotEmpty(message = "O campo Cpf ou Cnpj não pode ser vazio")
 	private String cpfOuCnpj;
-	private Integer tipo;
 	
+	private Integer tipo;
+	@NotEmpty(message = "Deve ter pelo menos um telefone")
+	@Length(min = 8, max = 12, message ="Deve conter ddd e o numero apenas!")
 	private String telefone1;
+	
 	private String telefone2;
 	private String telefone3;
 	 	 
