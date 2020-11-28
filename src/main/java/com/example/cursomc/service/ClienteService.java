@@ -104,13 +104,13 @@ public class ClienteService {
 				_cliente.setNome(cliente.getNome());
 			}
 			if (cliente.getEmail() != null) {
-				_cliente.setEmail(cliente.getNome());
+				_cliente.setEmail(cliente.getEmail());
 			}
 			if (cliente.getTipo() != null) {
 				_cliente.setTipo(cliente.getTipo());
 			}
 
-			return clienteRepo.save(cliente);
+			return clienteRepo.save(_cliente);
 		}
 
 		return null;

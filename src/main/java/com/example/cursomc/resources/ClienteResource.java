@@ -39,7 +39,7 @@ public class ClienteResource {
 	public ResponseEntity<Void> create(@Valid @RequestBody ClienteDTO clienteDto) {
 		Cliente Cliente = this.clienteService.fromDTO(clienteDto);
 		Cliente = clienteRepository.save(Cliente);
-		URI uri = ServletUriComponentsBuilder.fromPath("http://localhost:8070/cliente/getbyid/{id}").buildAndExpand(Cliente.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromPath("http:///localhost:8070/cliente/getbyid/{id}").buildAndExpand(Cliente.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
@@ -47,7 +47,7 @@ public class ClienteResource {
 	public ResponseEntity<Void> createCliente(@Valid @RequestBody ClienteDTONew clienteDto) {
 		Cliente Cliente = this.clienteService.fromDTO(clienteDto);
 		Cliente = clienteRepository.save(Cliente);
-		URI uri = ServletUriComponentsBuilder.fromPath("http://localhost:8070/cliente/getbyid/{id}").buildAndExpand(Cliente.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromPath("http:///localhost:8070/cliente/getbyid/{id}").buildAndExpand(Cliente.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 

@@ -2,13 +2,15 @@ package com.example.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
 import com.example.cursomc.domain.Cliente;
+import com.example.cursomc.resources.validation.ClienteUpdate;
 
-
+@ClienteUpdate
 public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -18,8 +20,7 @@ public class ClienteDTO implements Serializable {
 	@NotEmpty(message = "Não pode ser vazio")
 	@Length(min = 3, max = 80, message = "O nome deve ter entre 3 e 80 caracteres")
 	private String nome;
-	@NotEmpty(message = "Não pode ser vazio")
-	@Length(min = 7, max = 30, message = "O email deve ter entre 7 e 30 caracteres")
+	@Email
 	private String email;
 	private Integer tipo;
 	
