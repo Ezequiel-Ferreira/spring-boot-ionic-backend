@@ -3,6 +3,7 @@ package com.example.cursomc.resources.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -32,15 +33,17 @@ public class ResourcesExeptionHandler  {
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<StandardError> methodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request){
+	@ExceptionHandler(NotReadablePropertyException.class)
+	public ResponseEntity<StandardError> notReadablePropertyException(NotReadablePropertyException e, HttpServletRequest request){
 		
 		ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
 		
-		for(FieldError x : e.getBindingResult().getFieldErrors()) {
-			err.addMessage(x.getField(), x.getDefaultMessage());
-		}
+		
+			err.addMessage(e.getMessage(), e.getPropertyName());
+		
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 	}
+	
+	
  
 }
