@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -31,8 +32,8 @@ public class Cliente implements Serializable {
 	private Integer tipo;
 	
 
-	@OneToMany(mappedBy = "cliente")
-	private List<Endereco> endereco;
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+	private List<Endereco> endereco = new ArrayList<Endereco>();
 	
 	@ElementCollection
 	@CollectionTable(name = "TELEFONE")
@@ -112,6 +113,10 @@ public class Cliente implements Serializable {
 	public void setEndereco(List<Endereco> endereco) {
 		this.endereco = endereco;
 	}
+	public void addEndereco(Endereco endereco) {
+		this.endereco.add(endereco);
+	}
+	
 
 	public Set<String> getTelefones() {
 		return this.telefones;

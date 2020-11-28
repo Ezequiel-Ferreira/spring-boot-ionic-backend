@@ -7,34 +7,35 @@ public class ClienteDTONew {
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	private String telefone1;
+	private String telefone2;
+	private String telefone3;
+	 	 
 	private String lagradouro;
 	private String numero;
 	private String complemento;
 	private String bairro;
 	private String cep;
-	
-	private String telefone1;
-	private String telefone2;
-	private String telefone3;
-	
 	private Integer cidadeId;
 
-	public ClienteDTONew(String nome, String email, String cpfOuCnpj, Integer tipo, String lagradouro, String numero,
-			String complemento, String bairro, String cep, String telefone1, String telefone2, String telefone3,
+
+
+	public ClienteDTONew(String nome, String email, String cpfOuCnpj, Integer tipo, String telefone1, String telefone2,
+			String telefone3, String lagradouro, String numero, String complemento, String bairro, String cep,
 			Integer cidadeId) {
 		super();
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = tipo;
+		this.telefone1 = telefone1;
+		this.telefone2 = telefone2;
+		this.telefone3 = telefone3;
 		this.lagradouro = lagradouro;
 		this.numero = numero;
 		this.complemento = complemento;
 		this.bairro = bairro;
 		this.cep = cep;
-		this.telefone1 = telefone1;
-		this.telefone2 = (telefone2 == null) ? null: telefone2;
-		this.telefone3 = (telefone3 == null) ? null: telefone3;
 		this.cidadeId = cidadeId;
 	}
 

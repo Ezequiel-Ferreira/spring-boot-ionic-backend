@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.cursomc.domain.Cliente;
 import com.example.cursomc.dto.ClienteDTO;
+import com.example.cursomc.dto.ClienteDTONew;
 import com.example.cursomc.repository.ClienteRepository;
 import com.example.cursomc.service.ClienteService;
 
@@ -41,6 +42,15 @@ public class ClienteResource {
 		URI uri = ServletUriComponentsBuilder.fromPath("http://localhost:8070/cliente/getbyid/{id}").buildAndExpand(Cliente.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
+	
+	@PostMapping("/insert")
+	public ResponseEntity<Void> createCliente(@Valid @RequestBody ClienteDTONew clienteDto) {
+		Cliente Cliente = this.clienteService.fromDTO(clienteDto);
+		Cliente = clienteRepository.save(Cliente);
+		URI uri = ServletUriComponentsBuilder.fromPath("http://localhost:8070/cliente/getbyid/{id}").buildAndExpand(Cliente.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+
 
 	@GetMapping("/clientes")
 	public ResponseEntity<List<ClienteDTO>> listarClientes() {

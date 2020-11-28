@@ -13,8 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.cursomc.domain.Cidade;
 import com.example.cursomc.domain.Cliente;
+import com.example.cursomc.domain.Endereco;
 import com.example.cursomc.dto.ClienteDTO;
+import com.example.cursomc.dto.ClienteDTONew;
+import com.example.cursomc.repository.CidadeRepository;
 import com.example.cursomc.repository.ClienteRepository;
 import com.example.cursomc.service.exception.DataIntegrityException;
 import com.example.cursomc.service.exception.ObjectNotFoundException;
@@ -24,7 +28,9 @@ public class ClienteService {
 
 	@Autowired
 	private ClienteRepository clienteRepo;
-
+	@Autowired
+	private CidadeRepository cidRepo;
+	
 	
 	@Transactional
 	public Cliente createCliente(Cliente cliente) {
@@ -39,21 +45,44 @@ public class ClienteService {
 		}
 		return null;
 	}
-	
+
 	public Cliente fromDTO(ClienteDTO clienteDto) {
 		return new Cliente(clienteDto.getId(), clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getTipo());
+	}
+
+	public Cliente fromDTO(ClienteDTONew clienteDto) {
+		Cliente cliente = new Cliente(null, clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getTipo());
+		
+		cliente = clienteRepo.save(cliente);
+
+		Cidade cidade = cidRepo.findById(clienteDto.getCidadeId()).get();
+
+		Endereco endereco = new Endereco(null, clienteDto.getLagradouro(), clienteDto.getNumero(),
+				clienteDto.getComplemento(), clienteDto.getBairro(), clienteDto.getCep(), cliente, cidade);
+		
+		
+		cliente.addEndereco(endereco);
+		cliente.getTelefones().add(clienteDto.getTelefone1());
+		if (clienteDto.getTelefone2() != null) {
+			cliente.getTelefones().add(clienteDto.getTelefone2());
+		}
+		if (clienteDto.getTelefone3() != null) {
+			cliente.getTelefones().add(clienteDto.getTelefone3());
+		}
+		
+		return cliente;
 	}
 
 	public List<Cliente> findAll() {
 		List<Cliente> Clientes = clienteRepo.findAll();
 		return Clientes;
 	}
-	
-	public Page<Cliente> findPage(Integer page, Integer linePerPage, String orderBy, String direction){
-		
+
+	public Page<Cliente> findPage(Integer page, Integer linePerPage, String orderBy, String direction) {
+
 		PageRequest pageRequest = PageRequest.of(page, linePerPage, Sort.Direction.valueOf(direction), orderBy);
 		return clienteRepo.findAll(pageRequest);
-		
+
 	}
 
 	public Cliente clientePorId(Integer id) {
@@ -61,6 +90,7 @@ public class ClienteService {
 		return cliente.orElseThrow(() -> new ObjectNotFoundException(
 				"Cliente não encontrada! id: " + id + ", Tipo " + Cliente.class.getName()));
 	}
+
 	public Cliente clientePorIdTradicional(Integer id) {
 		Optional<Cliente> cliente = clienteRepo.findById(id);
 		return cliente.get();
@@ -69,10 +99,16 @@ public class ClienteService {
 	public Cliente updateCliente(Integer id, Cliente cliente) {
 		Cliente _cliente = clientePorId(id);
 		if (cliente != null) {
-			if (cliente.getNome() != null) {_cliente.setNome(cliente.getNome());}
-			if (cliente.getEmail() != null) {_cliente.setEmail(cliente.getNome());}
-			if (cliente.getTipo() != null) {_cliente.setTipo(cliente.getTipo());}
-			
+			if (cliente.getNome() != null) {
+				_cliente.setNome(cliente.getNome());
+			}
+			if (cliente.getEmail() != null) {
+				_cliente.setEmail(cliente.getNome());
+			}
+			if (cliente.getTipo() != null) {
+				_cliente.setTipo(cliente.getTipo());
+			}
+
 			return clienteRepo.save(cliente);
 		}
 
