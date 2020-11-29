@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.cursomc.domain.Categoria;
@@ -34,5 +37,14 @@ public class ProdutoService {
 		categoria.getProdutos().add(produto.get());
 		proRepo.save(produto.get());
 		cateRepo.save(categoria);
+	}
+	
+public Page<Produto> search(String nome, List<Integer> ids, Integer page, Integer linePerPage, String orderBy, String direction){
+		
+		PageRequest pageRequest = PageRequest.of(page, linePerPage, Sort.Direction.valueOf(direction), orderBy);
+		List<Categoria> categorias = cateRepo.findAllById(ids);
+		
+		return proRepo.search(nome, categorias, pageRequest);
+		
 	}
 }
